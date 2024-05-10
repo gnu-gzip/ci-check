@@ -36,5 +36,7 @@ cd "$packagedir" || exit 1
 # Build.
 $make > log2 2>&1; rc=$?; cat log2; test $rc = 0 || exit 1
 
-# Run the tests.
-$make check > log3 2>&1; rc=$?; cat log3; test $rc = 0 || exit 1
+# Run the tests. Ignore test framework failures that occur on Cygwin.
+$make check > log3 2>&1; rc=$?; cat log3; test $rc = 0 \
+  || grep '^# FAIL:  0$' tests/test-suite.log >/dev/null \
+  || exit 1
