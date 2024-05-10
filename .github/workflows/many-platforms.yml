@@ -54,14 +54,14 @@ jobs:
       - run: pwd
       # Install Ubuntu packages.
       # List of packages: https://packages.ubuntu.com/
-      - run: sudo apt install autopoint
+      - run: sudo apt install autopoint texlive
       - run: |
           ./build-tarball.sh '${{ env.package }}'
       # Doc: https://github.com/actions/upload-artifact?tab=readme-ov-file#usage
       - if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: logs-linux-gnu-ubuntu
+          name: logs-build-tarball-failed
           path: |
             ${{ env.package }}/config.cache
             ${{ env.package }}/config.log
