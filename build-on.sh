@@ -30,8 +30,11 @@ packagedir=`echo "$tarfile" | sed -e 's/\.tar\.gz$//'`
 tar xfz "$tarfile"
 cd "$packagedir" || exit 1
 
+mkdir build
+cd build
+
 # Configure.
-./configure --config-cache $configure_options > log1 2>&1; rc=$?; cat log1; test $rc = 0 || exit 1
+../configure --config-cache $configure_options > log1 2>&1; rc=$?; cat log1; test $rc = 0 || exit 1
 
 # Build.
 $make > log2 2>&1; rc=$?; cat log2; test $rc = 0 || exit 1
@@ -40,3 +43,5 @@ $make > log2 2>&1; rc=$?; cat log2; test $rc = 0 || exit 1
 $make check > log3 2>&1; rc=$?; cat log3; test $rc = 0 \
   || grep '^# FAIL:  0$' tests/test-suite.log >/dev/null \
   || exit 1
+
+cd ..
