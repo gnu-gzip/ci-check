@@ -26,10 +26,6 @@ set -e
 # Fetch sources (uses package 'git').
 git clone --depth 1 https://git.savannah.gnu.org/git/"$package".git
 git clone --depth 1 https://git.savannah.gnu.org/git/gnulib.git
-
-# Apply patches.
-(cd "$package" && patch -p1 < ../patches/0001-tests-Fix-test-failure-on-NetBSD-when-run-as-root.patch)
-
 export GNULIB_SRCDIR=`pwd`/gnulib
 cd "$package"
 # Force use of the newest gnulib.
