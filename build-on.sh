@@ -21,6 +21,7 @@
 package="$1"
 configure_options="$2"
 make="$3"
+install_optional_dependencies_command="$4"
 
 set -x
 
@@ -45,3 +46,27 @@ $make check > log3 2>&1; rc=$?; cat log3; test $rc = 0 \
   || exit 1
 
 cd ..
+
+if test -n "$install_optional_dependencies_command"; then
+  # Install the optional dependencies.
+  sh -c "$install_optional_dependencies_command"
+
+  # Build again, this time with optional packages installed.
+  mkdir build-full
+  cd build-full
+
+  # Configure.
+  ../configure --config-cache $configure_options > log1 2>&1; rc=$?; cat log1; test $rc = 0 || exit 1
+
+  # Build.
+  $make > log2 2>&1; rc=$?; cat log2; test $rc = 0 || exit 1
+
+  # Run the tests. Ignore test framework failures that occur on Cygwin.
+  $make check > log3 2>&1; rc=$?; cat log3; test $rc = 0 \
+    || grep '^# FAIL:  0$' tests/test-suite.log >/dev/null \
+    || exit 1
+
+  cd ..
+fi
+
+exit 0
