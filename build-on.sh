@@ -31,6 +31,7 @@ packagedir=`echo "$tarfile" | sed -e 's/\.tar\.gz$//'`
 tar xfz "$tarfile"
 cd "$packagedir" || exit 1
 
+# First, without the optional dependencies.
 mkdir build
 cd build
 
